@@ -1,4 +1,5 @@
 import { DataBaseModel } from "./DataBaseModel";
+import { Livro } from "./Livro";
 
 // Recupera conexão com o banco de dados
 const database = new DataBaseModel().pool;
@@ -6,30 +7,31 @@ const database = new DataBaseModel().pool;
 /**
  * Classe que representa um empréstimo no sistema
  */
-export class Emprestimo{
+export class Emprestimo {
     private idEmprestimo: number = 0; // identificador único do empréstimo
     private idAluno: number; // Identificador do aluno que realizou o empréstimo
     private idLivro: number; // Identificador do livro que foi emprestado
     private dataEmprestimo: Date; // Data do empréstimo
     private dataDevolucao: Date; // Data da devolução do livro
     private statusEmprestimo: string; // Status do empréstimo
+    private statusEmprestimoRegistro: boolean = true; //status de registro do emprestimo
 
-     /**
-     * Construtor da classe Emprestimos
-     * 
-     * @param idAluno Identificador do aluno que fez o empréstimo
-     * @param idLivro Identificador do livro emprestado
-     * @param dataEmprestimo Data em que o empréstimo foi realizado
-     * @param dataDevolucao Data prevista para devolução do livro
-     * @param statusEmprestimo Status do empréstimo (ex.: "ativo", "devolvido")
-     */
-    public constructor (_idAluno:number, _idLivro:number, _dataEmprestimo:Date, 
-                        _dataDevolucao:Date, _statusEmprestimo:string) {
-        
-        this.idAluno          = _idAluno;
-        this.idLivro          = _idLivro;
-        this.dataEmprestimo   = _dataEmprestimo;
-        this.dataDevolucao    = _dataDevolucao;
+    /**
+    * Construtor da classe Emprestimos
+    * 
+    * @param idAluno Identificador do aluno que fez o empréstimo
+    * @param idLivro Identificador do livro emprestado
+    * @param dataEmprestimo Data em que o empréstimo foi realizado
+    * @param dataDevolucao Data prevista para devolução do livro
+    * @param statusEmprestimo Status do empréstimo (ex.: "ativo", "devolvido")
+    */
+    public constructor(_idAluno: number, _idLivro: number, _dataEmprestimo: Date,
+        _dataDevolucao: Date, _statusEmprestimo: string) {
+
+        this.idAluno = _idAluno;
+        this.idLivro = _idLivro;
+        this.dataEmprestimo = _dataEmprestimo;
+        this.dataDevolucao = _dataDevolucao;
         this.statusEmprestimo = _statusEmprestimo;
     }
 
@@ -136,6 +138,14 @@ export class Emprestimo{
         this.statusEmprestimo = _statusEmprestimo;
     }
 
+    public getStatusEmprestimoRegistro(): boolean {
+        return this.statusEmprestimoRegistro;
+    }
+
+    public setStatusEmprestimoRegistro(_statusEmprestimoRegistro: boolean) {
+        this.statusEmprestimoRegistro = _statusEmprestimoRegistro
+    }
+
     // MÉTODO PARA ACESSAR O BANCO DE DADOS
     // CRUD Create - READ - Update - Delete
 
@@ -147,27 +157,28 @@ export class Emprestimo{
     static async listarEmprestimos(): Promise<Array<any> | null> {
         // Criando lista vazia para armazenar os emprestimos
         let listaDeEmprestimos: Array<any> = [];
-    
+
         try {
             // Query para consulta no banco de dados
             const querySelectEmprestimo = `
                 SELECT e.id_emprestimo, e.id_aluno, e.id_livro,
-                       e.data_emprestimo, e.data_devolucao, e.status_emprestimo,
+                       e.data_emprestimo, e.data_devolucao, e.status_emprestimo, e.status_emprestimo_registro,
                        a.ra, a.nome, a.sobrenome, a.celular, 
                        l.titulo, l.autor, l.editora
                 FROM Emprestimo e
                 JOIN Aluno a ON e.id_aluno = a.id_aluno
-                JOIN Livro l ON e.id_livro = l.id_livro;
+                JOIN Livro l ON e.id_livro = l.id_livro
+                WHERE status_emprestimo_registro = true;
             `;
-    
+
             // Executa a query no banco de dados
             const respostaBD = await database.query(querySelectEmprestimo);
-    
+
             // Verifica se há resultados
             if (respostaBD.rows.length === 0) {
                 return null;
             }
-    
+
             // Itera sobre as linhas retornadas
             respostaBD.rows.forEach((linha: any) => {
                 // Monta o objeto de empréstimo com os dados do aluno e do livro
@@ -178,6 +189,7 @@ export class Emprestimo{
                     dataEmprestimo: linha.data_emprestimo,
                     dataDevolucao: linha.data_devolucao,
                     statusEmprestimo: linha.status_emprestimo,
+                    statusEmprestimoRegistro: linha.status_emprestimo_registro,
                     aluno: {
                         ra: linha.ra,
                         nome: linha.nome,
@@ -190,22 +202,23 @@ export class Emprestimo{
                         editora: linha.editora
                     }
                 };
-    
+
                 // Adiciona o objeto à lista de empréstimos
                 listaDeEmprestimos.push(emprestimo);
+
             });
-    
+
             // retorna a lista de empréstimos
             return listaDeEmprestimos;
-    
-        // captura qualquer erro que possa acontecer
+
+            // captura qualquer erro que possa acontecer
         } catch (error) {
             // exibe o erro detalhado no console
             console.log(`Erro ao acessar o modelo: ${error}`);
             // retorna um valor nulo
             return null;
         }
-    } 
+    }
 
     /**
      * Cadastra um novo empréstimo no banco de dados
@@ -237,7 +250,7 @@ export class Emprestimo{
             const resultado = await database.query(queryInsertEmprestimo, valores);
 
             // verifica se a quantidade de linhas alteradas é diferente de 0
-            if(resultado.rowCount != 0) {
+            if (resultado.rowCount != 0) {
                 // exibe mensagem de sucesso no console
                 console.log(`Empréstimo cadastrado com sucesso! ID: ${resultado.rows[0].id_emprestimo}`);
                 // retorna o ID do empréstimo
@@ -246,28 +259,66 @@ export class Emprestimo{
 
             // retorna falso
             return false;
-        
-        // captura qualquer tipo de erro que possa acontecer
+
+            // captura qualquer tipo de erro que possa acontecer
         } catch (error) {
             // exibe o detalhe do erro no console
             console.error(`Erro ao cadastrar empréstimo: ${error}`);
             // lança um novo erro
             throw new Error('Erro ao cadastrar o empréstimo.');
         }
-    }    
+    }
 
-     /**
-     * Atualiza os dados de um empréstimo existente no banco de dados
-     * 
-     * @param idEmprestimo : number
-     * @param idAluno : number'
-     * @param idLivro : number
-     * @param dataEmprestimo : Date
-     * @param dataDevolucao : Date
-     * @param statusEmprestimo : string
-     * @returns Promise com o resultado da atualização ou erro
-     */
-     static async atualizarEmprestimo(
+    static async removerEmprestimo(idEmprestimo: number): Promise<any> {
+        try {
+
+            console.log("ID recebido para remoção:", idEmprestimo);
+            if (!idEmprestimo || isNaN(idEmprestimo)) {
+                console.error("Erro: ID do empréstimo inválido!");
+                return false;
+            }
+            //cria uma query para deletar um objeto do banco de dados, passando como parametro o id do emprestimo recebido na função
+            const queryUpdateEmprestimo = ` UPDATE emprestimo
+                                            SET status_emprestimo_registro = FALSE
+                                            WHERE id_emprestimo = ${idEmprestimo}`;
+
+            //executar a query e armazenar a resposta do BD
+            const respostaBD = await database.query(queryUpdateEmprestimo);
+
+            //verifica se a quantidade de linhas modificadas é diferente de 0
+            if (respostaBD.rowCount != 0) {
+                console.log(`Emprestimo removido com sucesso! ID do emprestimo: ${idEmprestimo}`);
+                //true significa que a remoção foi bem sucedida
+                return true;
+            }
+            //false, o que indica que a remoção não foi bem sucedida
+            return false;
+
+
+            //trata qualquer erro que possa acontecer no caminho
+        } catch (error) {
+            //exibe uma mensagem de erro
+            console.log(`Erro ao remover o emprestimo. Verifique os logs para mais detalhes.`)
+            //imprime o erro no console da API
+            console.log(error);
+            //retorna false, o que indica a remoção não foi feita
+            return false;
+        }
+    }
+
+
+    /**
+    * Atualiza os dados de um empréstimo existente no banco de dados
+    * 
+    * @param idEmprestimo : number
+    * @param idAluno : number'
+    * @param idLivro : number
+    * @param dataEmprestimo : Date
+    * @param dataDevolucao : Date
+    * @param statusEmprestimo : string
+    * @returns Promise com o resultado da atualização ou erro
+    */
+    static async atualizarEmprestimo(
         idEmprestimo: number,
         idAluno: number,
         idLivro: number,
@@ -294,7 +345,7 @@ export class Emprestimo{
             }
 
             return resultado.rows[0].id_emprestimo; // Retorna o ID do empréstimo atualizado
-        // captura qualquer erro que possa acontecer
+            // captura qualquer erro que possa acontecer
         } catch (error) {
             // exibe detalhes do erro no console
             console.error(`Erro ao atualizar empréstimo: ${error}`);
