@@ -269,7 +269,7 @@ export class Emprestimo {
         }
     }
 
-    static async removerEmprestimo(idEmprestimo: number): Promise<any> {
+    static async removerEmprestimo(idEmprestimo: number): Promise<boolean> {
         try {
 
             console.log("ID recebido para remoção:", idEmprestimo);
