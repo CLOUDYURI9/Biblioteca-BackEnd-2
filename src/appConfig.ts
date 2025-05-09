@@ -13,6 +13,8 @@ const SERVER_ROUTES = {
     ATUALIZAR_EMPRESTIMO: '/atualiza/emprestimo',
     LISTAR_EMPRESTIMOS: '/lista/emprestimos',
     REMOVER_EMPRESTIMO: '/remove/emprestimo',
+
+    NOVO_USUARIO: '/novo/usuario',
 }
 
 export { SERVER_ROUTES }
