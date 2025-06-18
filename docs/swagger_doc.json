@@ -1,0 +1,1231 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "v1.0.0",
+        "title": "Biblioteca",
+        "description": "Implementação do Swigger à API"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3333",
+            "description": ""
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/novo/aluno": {
+            "post": {
+                "tags": [
+                    "Alunos"
+                ],
+                "summary": "Cadastrar novo aluno",
+                "description": "Esta rota recebe informações de um aluno para cadastrar no banco de dados.",
+                "operationId": "cadastrarAluno",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Samuel"
+                                    },
+                                    "sobrenome": {
+                                        "type": "string",
+                                        "example": "Viana"
+                                    },
+                                    "dataNascimento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1995-01-26"
+                                    },
+                                    "endereco": {
+                                        "type": "string",
+                                        "example": "Parque Leblon, 478"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "samuel.caua.viana@facebook.com"
+                                    },
+                                    "celular": {
+                                        "type": "string",
+                                        "example": "85996712239"
+                                    }
+                                },
+                                "required": [
+                                    "nome",
+                                    "sobrenome",
+                                    "dataNascimento",
+                                    "endereco",
+                                    "email",
+                                    "celular"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Aluno cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Aluno cadastrado com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Não foi possível cadastrar o aluno",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Dados inválidos ou incompletos"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/lista/alunos": {
+            "get": {
+                "tags": [
+                    "Alunos"
+                ],
+                "summary": "Listar alunos",
+                "description": "Retorna uma lista com todos os alunos cadastrados no banco de dados.",
+                "operationId": "listarAlunos",
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de alunos retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "nome": {
+                                                "type": "string",
+                                                "example": "Samuel"
+                                            },
+                                            "sobrenome": {
+                                                "type": "string",
+                                                "example": "Viana"
+                                            },
+                                            "dataNascimento": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "1995-01-26"
+                                            },
+                                            "endereco": {
+                                                "type": "string",
+                                                "example": "Parque Leblon, 478"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "format": "email",
+                                                "example": "samuel.caua.viana@facebook.com"
+                                            },
+                                            "celular": {
+                                                "type": "string",
+                                                "example": "85996712239"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao recuperar alunos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Erro interno no servidor ao buscar alunos"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atualiza/aluno": {
+            "put": {
+                "tags": [
+                    "Alunos"
+                ],
+                "summary": "Atualizar dados de um aluno",
+                "description": "Esta rota recebe informações atualizadas de um aluno e atualiza seus dados no banco de dados.",
+                "operationId": "atualizarAluno",
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Juliana"
+                                    },
+                                    "sobrenome": {
+                                        "type": "string",
+                                        "example": "Caldeira"
+                                    },
+                                    "dataNascimento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2005-04-22"
+                                    },
+                                    "endereco": {
+                                        "type": "string",
+                                        "example": "Rua Joaquim Antônio Teixeira, 114"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "juliana.sophia.caldeira@estadao.com.br"
+                                    },
+                                    "celular": {
+                                        "type": "string",
+                                        "example": "64987598648"
+                                    }
+                                },
+                                "required": [
+                                    "nome",
+                                    "sobrenome",
+                                    "dataNascimento",
+                                    "endereco",
+                                    "email",
+                                    "celular"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Aluno atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Dados do aluno atualizados com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na atualização dos dados do aluno",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Dados inválidos ou incompletos"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aluno não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Aluno não encontrado"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/remove/aluno": {
+            "put": {
+                "tags": [
+                    "Alunos"
+                ],
+                "summary": "Remover (inativar) aluno",
+                "description": "Marca um aluno como removido ou inativo com base no ID fornecido.",
+                "operationId": "removerAluno",
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "idAluno",
+                        "in": "query",
+                        "required": true,
+                        "description": "ID do aluno a ser removido",
+                        "schema": {
+                            "type": "integer",
+                            "example": 3
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Aluno removido com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Aluno removido com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parâmetro idAluno inválido ou ausente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "ID do aluno é obrigatório e deve ser um número"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aluno não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Aluno com o ID fornecido não foi encontrado"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/lista/livros": {
+            "get": {
+                "tags": [
+                    "Livros"
+                ],
+                "summary": "Listar livros",
+                "description": "Retorna uma lista com todos os livros cadastrados no banco de dados.",
+                "operationId": "listarLivros",
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de livros retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "idLivro": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "statusLivro": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "capa": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "example": null
+                                            },
+                                            "titulo": {
+                                                "type": "string",
+                                                "example": "O Senhor dos Anéis"
+                                            },
+                                            "autor": {
+                                                "type": "string",
+                                                "example": "J.R.R. Tolkien"
+                                            },
+                                            "editora": {
+                                                "type": "string",
+                                                "example": "HarperCollins"
+                                            },
+                                            "anoPublicacao": {
+                                                "type": "string",
+                                                "example": "1954"
+                                            },
+                                            "isbn": {
+                                                "type": "string",
+                                                "example": "978-0007525546"
+                                            },
+                                            "quantTotal": {
+                                                "type": "integer",
+                                                "example": 10
+                                            },
+                                            "quantDisponivel": {
+                                                "type": "integer",
+                                                "example": 10
+                                            },
+                                            "valorAquisicao": {
+                                                "type": "string",
+                                                "example": "150.00"
+                                            },
+                                            "statusLivroEmprestado": {
+                                                "type": "string",
+                                                "example": "Disponível"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao recuperar livros",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Erro interno no servidor ao buscar livros"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/novo/livro": {
+            "post": {
+                "tags": [
+                    "Livros"
+                ],
+                "summary": "Cadastrar novo livro",
+                "description": "Esta rota recebe informações de um livro para cadastrar no banco de dados.",
+                "operationId": "cadastrarLivro",
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "statusLivro": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "capa": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "example": null
+                                    },
+                                    "titulo": {
+                                        "type": "string",
+                                        "example": "O Senhor dos Anéis"
+                                    },
+                                    "autor": {
+                                        "type": "string",
+                                        "example": "J.R.R. Tolkien"
+                                    },
+                                    "editora": {
+                                        "type": "string",
+                                        "example": "HarperCollins"
+                                    },
+                                    "anoPublicacao": {
+                                        "type": "string",
+                                        "example": "1954"
+                                    },
+                                    "isbn": {
+                                        "type": "string",
+                                        "example": "978-0007525546"
+                                    },
+                                    "quantTotal": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "quantDisponivel": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "valorAquisicao": {
+                                        "type": "string",
+                                        "example": "150.00"
+                                    },
+                                    "statusLivroEmprestado": {
+                                        "type": "string",
+                                        "example": "Disponível"
+                                    }
+                                },
+                                "required": [
+                                    "statusLivro",
+                                    "titulo",
+                                    "autor",
+                                    "editora",
+                                    "anoPublicacao",
+                                    "isbn",
+                                    "quantTotal",
+                                    "quantDisponivel",
+                                    "valorAquisicao",
+                                    "statusLivroEmprestado"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Livro cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Livro cadastrado com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Não foi possível cadastrar o livro",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Dados inválidos ou incompletos"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atualiza/livro": {
+            "put": {
+                "tags": [
+                    "Livros"
+                ],
+                "summary": "Atualizar dados de um livro",
+                "description": "Atualiza as informações de um livro existente no banco de dados.",
+                "operationId": "atualizarLivro",
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idLivro": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "statusLivro": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "capa": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "example": null
+                                    },
+                                    "titulo": {
+                                        "type": "string",
+                                        "example": "O Senhor dos Anéis"
+                                    },
+                                    "autor": {
+                                        "type": "string",
+                                        "example": "J.R.R. Tolkien"
+                                    },
+                                    "editora": {
+                                        "type": "string",
+                                        "example": "HarperCollins"
+                                    },
+                                    "anoPublicacao": {
+                                        "type": "string",
+                                        "example": "1954"
+                                    },
+                                    "isbn": {
+                                        "type": "string",
+                                        "example": "978-0007525546"
+                                    },
+                                    "quantTotal": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "quantDisponivel": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "valorAquisicao": {
+                                        "type": "string",
+                                        "example": "150.00"
+                                    },
+                                    "statusLivroEmprestado": {
+                                        "type": "string",
+                                        "example": "Disponível"
+                                    }
+                                },
+                                "required": [
+                                    "idLivro",
+                                    "statusLivro",
+                                    "titulo",
+                                    "autor",
+                                    "editora",
+                                    "anoPublicacao",
+                                    "isbn",
+                                    "quantTotal",
+                                    "quantDisponivel",
+                                    "valorAquisicao",
+                                    "statusLivroEmprestado"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Livro atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Livro atualizado com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na atualização dos dados do livro",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Dados inválidos ou incompletos"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Livro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Livro não encontrado"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/remove/livro": {
+            "put": {
+                "tags": [
+                    "Livros"
+                ],
+                "summary": "Remover (inativar) livro",
+                "description": "Marca um livro como removido ou inativo com base no ID fornecido.",
+                "operationId": "removerLivro",
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "idLivro",
+                        "in": "query",
+                        "required": true,
+                        "description": "ID do livro a ser removido",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Livro removido com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Livro removido com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parâmetro idLivro inválido ou ausente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "ID do livro é obrigatório e deve ser um número"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Livro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Livro com o ID fornecido não foi encontrado"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/lista/emprestimos": {
+            "get": {
+                "tags": [
+                    "Empréstimos"
+                ],
+                "summary": "Listar empréstimos",
+                "description": "Retorna todos os empréstimos registrados no sistema, com detalhes do aluno e do livro.",
+                "operationId": "listarEmprestimos",
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de empréstimos retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "idEmprestimo": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "idAluno": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "idLivro": {
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "dataEmprestimo": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-09-01T03:00:00.000Z"
+                                            },
+                                            "dataDevolucao": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-09-15T03:00:00.000Z"
+                                            },
+                                            "statusEmprestimo": {
+                                                "type": "string",
+                                                "example": "Em andamento"
+                                            },
+                                            "statusEmprestimoRegistro": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "aluno": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "ra": {
+                                                        "type": "string",
+                                                        "example": "AAA0001"
+                                                    },
+                                                    "nome": {
+                                                        "type": "string",
+                                                        "example": "Conor"
+                                                    },
+                                                    "sobrenome": {
+                                                        "type": "string",
+                                                        "example": "McGregor"
+                                                    },
+                                                    "celular": {
+                                                        "type": "string",
+                                                        "example": "16998959876"
+                                                    }
+                                                }
+                                            },
+                                            "livro": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "titulo": {
+                                                        "type": "string",
+                                                        "example": "1984"
+                                                    },
+                                                    "autor": {
+                                                        "type": "string",
+                                                        "example": "George Orwell"
+                                                    },
+                                                    "editora": {
+                                                        "type": "string",
+                                                        "example": "Companhia das Letras"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao recuperar empréstimos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Erro interno no servidor"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/novo/emprestimo": {
+            "post": {
+                "tags": [
+                    "Empréstimos"
+                ],
+                "summary": "Cadastrar novo empréstimo",
+                "description": "Registra um novo empréstimo de livro para um aluno.",
+                "operationId": "cadastrarEmprestimo",
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idAluno": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "idLivro": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "dataEmprestimo": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-09-01T03:00:00.000Z"
+                                    },
+                                    "dataDevolucao": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-09-15T03:00:00.000Z"
+                                    },
+                                    "statusEmprestimo": {
+                                        "type": "string",
+                                        "example": "Em andamento"
+                                    },
+                                    "statusEmprestimoRegistro": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "required": [
+                                    "idAluno",
+                                    "idLivro",
+                                    "dataEmprestimo",
+                                    "dataDevolucao",
+                                    "statusEmprestimo",
+                                    "statusEmprestimoRegistro"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Empréstimo registrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Empréstimo cadastrado com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos ou incompletos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Informações do empréstimo estão incompletas ou incorretas"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atualiza/emprestimo": {
+            "put": {
+                "tags": [
+                    "Empréstimos"
+                ],
+                "summary": "Atualizar empréstimo",
+                "description": "Atualiza os dados de um empréstimo existente.",
+                "operationId": "atualizarEmprestimo",
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idEmprestimo": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "idAluno": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "idLivro": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "dataEmprestimo": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-09-01T03:00:00.000Z"
+                                    },
+                                    "dataDevolucao": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-09-15T03:00:00.000Z"
+                                    },
+                                    "statusEmprestimo": {
+                                        "type": "string",
+                                        "example": "Finalizado"
+                                    },
+                                    "statusEmprestimoRegistro": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "required": [
+                                    "idEmprestimo",
+                                    "idAluno",
+                                    "idLivro",
+                                    "dataEmprestimo",
+                                    "dataDevolucao",
+                                    "statusEmprestimo",
+                                    "statusEmprestimoRegistro"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Empréstimo atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Empréstimo atualizado com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na atualização",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Dados inválidos ou incompletos"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Empréstimo não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Empréstimo não encontrado"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/remove/emprestimo": {
+            "put": {
+                "tags": [
+                    "Empréstimos"
+                ],
+                "summary": "Remover (inativar) empréstimo",
+                "description": "Desativa um empréstimo com base no ID fornecido.",
+                "operationId": "removerEmprestimo",
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "idEmprestimo",
+                        "in": "query",
+                        "required": true,
+                        "description": "ID do empréstimo a ser removido",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Empréstimo removido com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Empréstimo removido com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parâmetro idEmprestimo inválido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "ID do empréstimo é obrigatório e deve ser um número"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Empréstimo não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "erro": {
+                                            "type": "string",
+                                            "example": "Empréstimo com o ID fornecido não foi encontrado"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
